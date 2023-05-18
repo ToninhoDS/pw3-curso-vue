@@ -5,25 +5,27 @@
 			<form class="painel">
 				<div class="cabecalho">Formulário</div>
 				<Rotulo nome="E-mail">
-					<input type="text">
+					<input type="text" v-model.lazy="form.email"> <!--colocando ponto depois model . lazy ecnomiza processameno so mostra o que foi digitado depois de tap e outros-->
 				</Rotulo>
-				<Rotulo nome="Senha">
-					<input type="password">
+				<Rotulo nome="Senha"><!-- trim nao manda para banco com espacos atras e na frente-->
+					<input type="password" v-model.trim="form.senha">
 				</Rotulo>
 				<Rotulo nome="Idade">
-					<input type="number">
+					<input type="number" v-model.number="form.idade">
 				</Rotulo>
 				<Rotulo nome="Mensagem">
-					<textarea name="" cols="30" rows="5"></textarea>
+					<textarea name="" cols="30" rows="5" v-model="form.mensagem"></textarea>
+				
 				</Rotulo>
 				<Rotulo nome="Características do Problema">
-					<span class="mr-4"><input type="checkbox" value="reproduzivel"> Reproduzível</span>
-					<span><input type="checkbox" value="intermitente"> Intermitente</span>
+					<span class="mr-4"><input type="checkbox" value="reproduzivel" v-model="form.caracteriscas"> Reproduzível</span>
+					<span><input type="checkbox" value="intermitente" v-model="form.caracteriscas"> Intermitente</span>
+
 				</Rotulo>
 				<Rotulo nome="Qual produto?">
-					<span class="mr-4"><input type="radio"> Web</span>
-					<span class="mr-4"><input type="radio"> Mobile</span>
-					<span><input type="radio"> Outro</span>
+					<span class="mr-4"><input type="radio" v-model="form.produto" :value="1"> Web</span>
+					<span class="mr-4"><input type="radio" v-model="form.produto" :value="2"> Mobile</span>
+					<span><input type="radio" v-model="form.produto" :value="3"> Outro</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
 					<select name="" id="">
@@ -39,22 +41,29 @@
 			<div class="painel">
 				<div class="cabecalho">Resultado</div>
 				<Rotulo nome="E-mail">
-					<span>???</span>
+					<span>{{form.email}}</span>
 				</Rotulo>
 				<Rotulo nome="Senha">
-					<span>???</span>
+					<span>{{ form.senha }}</span>
 				</Rotulo>
 				<Rotulo nome="Idade">
-					<span>???</span>
+					<span>{{ form.idade }} - {{form.idade }}</span>
 				</Rotulo>
 				<Rotulo nome="Mensagem">
-					<span>???</span>
+					<span style="white-space:pre;">{{ form.mensagem }}</span>
 				</Rotulo>
 				<Rotulo nome="Marque as Opções">
-					<span>???</span>
+					<span>
+						<ul>
+							<li v-for="c in form.caracteriscas" :key="c">
+							{{ c }}	
+							</li>
+							
+						</ul>
+					</span>
 				</Rotulo>
 				<Rotulo nome="Qual produto?">
-					<span>???</span>
+					<span>{{ form.produto }}- {{typeof form.produto }}</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
 					<span>???</span>
@@ -73,7 +82,22 @@ import Escolha from './components/Escolha.vue'
 
 export default {
 	name: 'app',
-	components: { Rotulo, Escolha }
+	components: { Rotulo, Escolha },
+	data(){
+		return{
+			form:{
+			email:'default@gmail.com',
+			senha:'',
+			idade: 28,
+			mensagem: '',
+			caracteriscas:['reproduzivel'],
+			produto: 2,
+
+
+		}
+		
+		}
+	}
 }
 </script>
 
