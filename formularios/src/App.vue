@@ -2,7 +2,7 @@
 	<div id="app">
 		<h1>Registrar Reclamação</h1>
 		<div class="conteudo">
-			<form class="painel">
+			<form class="painel" v-if="!enviado">
 				<div class="cabecalho">Formulário</div>
 				<Rotulo nome="E-mail">
 					<input type="text" v-model.lazy="form.email"> <!--colocando ponto depois model . lazy ecnomiza processameno so mostra o que foi digitado depois de tap e outros-->
@@ -28,17 +28,26 @@
 					<span><input type="radio" v-model="form.produto" :value="3"> Outro</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
-					<select name="" id="">
-						<option></option>
+					<select v-model="form.prioridade">
+						<option
+						v-for="P in prioridades" 
+						:key="P.codigo"
+						:value="P.codigo"
+
+						>
+						{{ P.codigo }} - {{ P.nome }}
+						<!-- :selected="p.codigo === '1'" -->
+						</option>
 					</select>
 				</Rotulo>
 				<Rotulo nome="Primeira Reclamação?">
-					<Escolha />
+					<Escolha  v-model="escolha"/>
 				</Rotulo>
 				<hr>
-				<button>Enviar</button>
+				<button @click.prevent="enviar">Enviar</button>
+				<!-- prevent é o que vai enviar o formulario -->
 			</form>
-			<div class="painel">
+			<div class="painel" v-else>
 				<div class="cabecalho">Resultado</div>
 				<Rotulo nome="E-mail">
 					<span>{{form.email}}</span>
@@ -66,10 +75,10 @@
 					<span>{{ form.produto }}- {{typeof form.produto }}</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
-					<span>???</span>
+					<span>{{ form.prioridade }}</span>
 				</Rotulo>
 				<Rotulo nome="Primeira Reclamação?">
-					<span>???</span>
+					<span>{{form.escolha}}</span>
 				</Rotulo>
 			</div>
 		</div>
@@ -92,12 +101,27 @@ export default {
 			mensagem: '',
 			caracteriscas:['reproduzivel'],
 			produto: 2,
-
-
-		}
+			prioridade: '0',
+			codigo:'',
+			escolha: true,
+		},
+		prioridades:[
+		{codigo: '0', nome:'Alta'},
+		{codigo: '1', nome:'Moderada'},
+		{codigo: '2', nome:'baixa'},
+		],
+		enviado: false,
 		
 		}
-	}
+	},
+	methods:{
+		enviar() {
+			this.enviado = true;
+			
+			// validar o formulario
+			// enviar o formulario para o back
+		}
+}
 }
 </script>
 
